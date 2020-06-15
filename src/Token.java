@@ -2,8 +2,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Token {
-
-    private int x, y, score;
+    SnakeGame SG;
+    private int x, y;
     private Snake snake;
 
     public Token(Snake s){
@@ -17,26 +17,32 @@ public class Token {
 
     }
 
-    public int getScore(){
-        return score;
-    }
+
 
     public void draw(Graphics g){
         g.setColor(Color.green);
         g.fillRect(x,y, 6 , 6);
     }
-
-    public boolean snakeCollision() {
-        int snakeX = snake.getX() + 2;
-        int snakeY = snake.getY() +2;
-        if (snakeX >= (x - 1) && snakeX <= (x+7)) {
-            if (snakeY >= (y - 1) && snakeY <= (y + 7)) {
-                changePosition();
-                score++;
-                snake.setElongate(true);
-                return true;
-            }
-        }
-            return false;
+    public int getX(){
+        return x;
     }
+    public int getY(){
+        return y;
+    }
+    public void EasySnakeCollision(){
+        snake.setElongateEasy(true);
+        snake.setElongateNormal(false);
+        snake.setElongateHard(false);
+    }
+    public void NormalSnakeCollision(){
+        snake.setElongateNormal(true);
+        snake.setElongateHard(false);
+        snake.setElongateEasy(false);
+    }
+    public void HardSnakeCollision(){
+        snake.setElongateHard(true);
+        snake.setElongateEasy(false);
+        snake.setElongateNormal(false);
+    }
+
 }

@@ -12,10 +12,15 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
     Snake snake;
     boolean gameOver;
     Token token;
+    boolean easy, normal, hard;
+    private int score;
 
     public void init(){
         this.resize(400, 400);
         gameOver = false;
+        easy = false;
+        normal = false;
+        hard = false;
         img = createImage(400, 400);
         gfx = img.getGraphics();
         this.addKeyListener(this);
@@ -23,6 +28,9 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
         token = new Token(snake);
         thread = new Thread(this);
         thread.start();
+    }
+    public int getScore(){
+        return score;
     }
 
     public void paint(Graphics g) {
@@ -35,7 +43,7 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
         else {
             gfx.setColor(Color.red);
             gfx.drawString("Game Over", 180, 150);
-            gfx.drawString("Score: " + token.getScore(), 180, 170);
+            gfx.drawString("Score: " +getScore(), 180, 170);
 
         }
             g.drawImage(img, 0, 0, null);
@@ -57,7 +65,8 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
             if(!gameOver) { 
                 snake.move();
                 this.checkGameOver();
-                token.snakeCollision();
+                snakeCollision();
+
             }
 
             this.repaint();
@@ -65,9 +74,12 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
                 Thread.sleep(30);
             }catch(InterruptedException e){
                 e.printStackTrace();
+
             }
 
+
         }
+
 
     }
 
@@ -88,10 +100,35 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
 
     public void keyPressed(KeyEvent e) {
         if(!snake.isMoving()){
-            if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_RIGHT  || e.getKeyCode() == KeyEvent.VK_DOWN) {
+
+
+            }
+            if (e.getKeyCode() == KeyEvent.VK_1) {
+                easy = true;
+                normal = false;
+                hard = false;
+                snake.setIsMoving(true);
+                snake.setXDir(1);
+                snake.setYDir(0);
+
+            }
+            if(e.getKeyCode() == KeyEvent.VK_2){
+                normal = true;
+                snake.setXDir(1);
+                snake.setYDir(0);
+
+
                 snake.setIsMoving(true);
             }
-        }
+            if(e.getKeyCode() == KeyEvent.VK_3){
+                hard =  true;
+
+                snake.setIsMoving(true);
+                snake.setXDir(1);
+                snake.setYDir(0);
+            }
+
+
 
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             if (snake.getYDir() != 1) {
@@ -122,6 +159,46 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
         public void keyReleased(KeyEvent e) {
 
     }
+
+    public boolean snakeCollision() {
+        int snakeX = snake.getX() + 2;
+        int snakeY = snake.getY() +2;
+        if (snakeX >= (token.getX() - 1) && snakeX <= (token.getX()+7)) {
+
+
+                if(easy == true){
+                    if (snakeY >= (token.getY() - 1) && snakeY <= (token.getY() + 7)) {
+                        token.changePosition();
+                        score++;
+                        token.EasySnakeCollision();
+
+                    }
+                }
+                if(normal == true){
+                    if (snakeY >= (token.getY() - 1) && snakeY <= (token.getY() + 7)) {
+
+                        token.changePosition();
+                        score++;
+                        token.NormalSnakeCollision();
+
+                    }
+                }
+                if(hard == true) {
+                    if (snakeY >= (token.getY() - 1) && snakeY <= (token.getY() + 7)) {
+
+                        token.changePosition();
+                        score++;
+                        token.HardSnakeCollision();
+
+                    }
+                }
+
+                return true;
+            }
+
+        return false;
+    }
+
 
 
 }

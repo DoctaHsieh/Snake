@@ -7,7 +7,7 @@ public class Snake {
 
     List<Point> snakePoints;
     int xDir, yDir;
-    boolean isMoving, elongate;
+    boolean isMoving, elongateEasy, elongateNormal, elongateHard;
     final int STARTSIZE = 20, STARTX = 150, STARTY = 150;
 
     public Snake() {
@@ -15,7 +15,7 @@ public class Snake {
         xDir = 0;
         yDir = 0;
         isMoving = false;
-        elongate = false;
+        elongateEasy = false;
         snakePoints.add(new Point(STARTX, STARTY));
         for (int i = 1; i < STARTSIZE; i++) {
             snakePoints.add(new Point(STARTX - i * 4, STARTY));
@@ -66,9 +66,10 @@ public class Snake {
     public void setIsMoving(boolean b){
         isMoving = b;
     }
-    public void setElongate(boolean b) {
-        elongate = b;
-    }
+    public void setElongateEasy(boolean b) { elongateEasy = b; }
+    public void setElongateNormal(boolean b) { elongateNormal = b;}
+    public void setElongateHard(boolean b){elongateHard = b;}
+
 
     public void move() {
         if (isMoving) {
@@ -82,12 +83,28 @@ public class Snake {
                 snakePoints.set(i, snakePoints.get(i - 1));
             }
             snakePoints.set(0, newStart);
-            if(elongate){
+            if(elongateEasy){
                 snakePoints.add(last);
-                elongate = false;
+                elongateEasy = false;
+            }
+            if(elongateNormal){
+                snakePoints.add(last);
+                snakePoints.add(last);
+                snakePoints.add(last);
+                elongateNormal = false;
+            }
+            if(elongateHard){
+                snakePoints.add(last);
+                snakePoints.add(last);
+                snakePoints.add(last);
+                snakePoints.add(last);
+                snakePoints.add(last);
+
+                elongateHard = false;
             }
         }
     }
+
 
 
     public boolean snakeCollision() {
