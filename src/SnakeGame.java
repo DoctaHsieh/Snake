@@ -10,7 +10,7 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
     Image img;
     Thread thread;
     Snake snake;
-    boolean gameOver;
+    boolean gameOver, gameStarted;
     Token token;
     boolean easy, normal, hard;
     private int score;
@@ -18,6 +18,7 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
     public void init(){
         this.resize(400, 400);
         gameOver = false;
+        gameStarted = false;
         easy = false;
         normal = false;
         hard = false;
@@ -40,12 +41,23 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
             snake.draw(gfx);
             token.draw(gfx);
         }
-        else {
+        if(!easy && !normal && !hard){
+            gfx.setColor(Color.red);
+            gfx.drawString("Press 1 for easy, 2 for medium, 3 for hard", 100, 150);
+            gfx.drawString("Snake", 180, 130);
+
+        }
+        if(gameOver) {
             gfx.setColor(Color.red);
             gfx.drawString("Game Over", 180, 150);
             gfx.drawString("Score: " +getScore(), 180, 170);
 
         }
+        if(easy || normal || hard && gameStarted == false){
+            gfx.setColor(Color.red);
+            gfx.drawString("Press a directional button to start.", 100, 150);
+        }
+
             g.drawImage(img, 0, 0, null);
 
 
@@ -107,30 +119,26 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
                 easy = true;
                 normal = false;
                 hard = false;
-                snake.setIsMoving(true);
-                snake.setXDir(1);
-                snake.setYDir(0);
 
             }
             if(e.getKeyCode() == KeyEvent.VK_2){
                 normal = true;
-                snake.setXDir(1);
-                snake.setYDir(0);
 
 
-                snake.setIsMoving(true);
+
+
             }
             if(e.getKeyCode() == KeyEvent.VK_3){
                 hard =  true;
 
-                snake.setIsMoving(true);
-                snake.setXDir(1);
-                snake.setYDir(0);
+
             }
 
 
 
         if (e.getKeyCode() == KeyEvent.VK_UP) {
+            gameStarted = true;
+            snake.setIsMoving(true);
             if (snake.getYDir() != 1) {
                 snake.setYDir(-1);
                 snake.setXDir(0);
@@ -138,18 +146,24 @@ public class SnakeGame extends Applet implements Runnable, KeyListener {
 
         }
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            gameStarted = true;
+            snake.setIsMoving(true);
             if (snake.getYDir() != -1) {
                 snake.setYDir(1);
                 snake.setXDir(0);
             }
         }
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            gameStarted = true;
+            snake.setIsMoving(true);
             if (snake.getXDir() != 1) {
                 snake.setXDir(-1);
                 snake.setYDir(0);
             }
         }
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            gameStarted = true;
+            snake.setIsMoving(true);
             if (snake.getXDir() != -1) {
                 snake.setXDir(1);
                 snake.setYDir(0);
